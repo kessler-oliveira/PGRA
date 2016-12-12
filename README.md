@@ -1,4 +1,4 @@
-[![Dependency Status](https://gemnasium.com/github.com/kessler-oliveira/PGRA.svg)](https://gemnasium.com/github.com/kessler-oliveira/PGRA)
+[![Dependency Status](https://gemnasium.com/badges/github.com/kessler-oliveira/PGRA.svg)](https://gemnasium.com/github.com/kessler-oliveira/PGRA)
 
 # PGRA - PostgreSQL Rewrite Advisor
 
