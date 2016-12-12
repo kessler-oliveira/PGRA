@@ -1,0 +1,96 @@
+.progress-bar {
+  text-align: center;
+}
+
+.progress-bar .circle,
+.progress-bar .bar {
+  display: inline-block;
+  background: #fff;
+  width: 40px; height: 40px;
+  border-radius: 40px;
+  border: 1px solid #d5d5da;
+  position: relative;
+}
+
+.progress-bar .bar {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  top: -33px;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  transition: 1s linear all;
+}
+
+.progress-bar .circle .label {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 32px;
+  margin-top: 3px;
+  color: #b5b5ba;
+  font-size: 17px;
+}
+
+.progress-bar .circle .title {
+  color: #b5b5ba;
+  font-size: 12px;
+  line-height: 30px;
+  margin-left: -5px;
+}
+
+/* Done / Active */
+.progress-bar .bar.done,
+.progress-bar .circle.done {
+  background: linear-gradient(to right, #EEE 100%, #FFF 0%) !important;
+}
+
+.progress-bar .bar.active {
+  background: linear-gradient(to right, #EEE 40%, #FFF 60%);
+}
+
+.progress-bar .circle.done .label {
+  color: #ffffff;
+  background: #66bb6a;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+
+.progress-bar .circle.done .title {
+  color: rgba(0,0,0,0.87);
+}
+
+.progress-bar .circle.erro .label {
+  color: #ffffff;
+  background: #bb6666;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+
+.progress-bar .circle.erro .title {
+  color: rgba(0,0,0,0.87);
+}
+
+
+.progress-bar .circle.active:before {
+  content: '';
+  background: url(/img/puff.svg);
+  background-size: cover;
+  height: 75px;
+  width: 75px;
+  position: absolute;
+  left: 19px;
+  top: 19px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.progress-bar .circle.active .label {
+  color: #FFF;
+  background: #5c6bc0;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+
+.progress-bar .circle.active .title {
+  color: #3f51b5;
+}

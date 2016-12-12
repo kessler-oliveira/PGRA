@@ -1,0 +1,121 @@
+doctype 5
+html
+  head
+    title PostgreSQL Rewrite Advisor
+    meta charset='utf-8'
+    meta content='all, index, follow' name='robots'
+    meta content='PostgreSQL Rewrite Advisor' name='Kessler Oliveira'
+    meta content='width=device-width, initial-scale=1.0' name='viewport'
+    = stylesheet_tag '/css/materialize.min.css'
+    = stylesheet_tag '/css/google-icons.css'
+    = stylesheet_tag '/css/loader.css'
+    = stylesheet_tag '/css/index.css'
+    = stylesheet_tag '/css/perfect-scrollbar.min.css'
+    = stylesheet_tag '/css/progress-bar.css'
+    = stylesheet_tag '/css/jquery-confirm.css'
+
+  body
+    div id="loader-wrapper"
+      div id="loader"
+      div class="loader-section section-left"
+      div class="loader-section section-right"
+    div id="row" class="row"
+      div id="menu" class="col s3"
+      div id="content" class="col s9 offset-s3"
+        div id="container" class="container"
+
+    = javascript_tag '/js/jquery.min.js'
+    = javascript_tag '/js/jquery-ui.min.js'
+    = javascript_tag '/js/materialize.min.js'
+    = javascript_tag '/js/perfect-scrollbar.jquery.min.js'
+    = javascript_tag '/js/jquery-confirm.js'
+
+    javascript:
+      $(document).ready(function(){
+        jconfirm.defaults = {
+          closeIcon: false,
+          animation: 'opacity',
+          closeAnimation: 'opacity',
+          animationSpeed: 400,
+          backgroundDismiss: true,
+          columnClass: 'col s6 offset-s3',
+          opacity: 1
+        };
+
+        $.ajax({
+          url: '/connect/menu',
+          type: 'GET',
+          success: function(data){
+            $("#menu").html(data);
+            $.ajax({
+              url: '/connect/add',
+              type: 'GET',
+              success: function(data){
+                $(data).insertAfter($("#row"));
+                $.ajax({
+                  url: '/connect/edit',
+                  type: 'GET',
+                  success: function(data){
+                    $(data).insertAfter($("#row"));
+                    $.ajax({
+                      url: '/pgra/submit',
+                      type: 'GET',
+                      success: function(data){
+                        $("#container").html(data);
+                        $('body').toggleClass('loaded');
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+
+        $('#content').perfectScrollbar();
+      });
+
+      function error() {
+        $.ajax({
+          url: '/pgra/submit',
+          type: "GET",
+          success: function(data) {
+            $("#container").fadeOut(200, function() {
+              $('#content').removeClass('col s8');
+              $('#content').removeClass('offset-s2');
+              $('#content').toggleClass('col s9');
+              $('#content').toggleClass('offset-s3');
+              $('#menu').toggle("slide", 200);
+              $("#container").html(data);
+              $("#container").fadeIn(800);
+              $('#add').fadeIn(200);
+              show_error();
+            });
+          }
+        });
+      }
+
+      function show_error() {
+        $.ajax({
+          url: '/error',
+          type: 'GET',
+          success: function(data){
+            errors = JSON.parse(data);
+            errors.feedback.forEach(function(error){
+              Materialize.toast(error, 10000);
+            });
+            $("#toast-container .toast").unbind();
+            $("#toast-container .toast").click(function(){
+              $(this).toggle('fade', 200);
+            });
+            $.ajax({
+              url: '/error/clean',
+              type: 'GET',
+            });
+          }
+        });
+      }
+
+      function debug() {
+        //window.open('/show', '_blank');
+      }

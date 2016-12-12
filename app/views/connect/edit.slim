@@ -1,0 +1,140 @@
+form id="edit-connection" class="modal modal-fixed-footer hoverable"
+  div id="card" class="card"
+    div class="card-title submit-form valign-wrapper card-panel indigo lighten-1"
+      span class="valign white-text text-white"
+        = " Editar Conexão"
+    div class="card-content"
+      div class="row"
+        div class="input-field col s12"
+          div class="row"
+            input id="id" name="id" type="hidden"
+            div class="input-field col s12"
+              input id="name" name="name" type="text" class="validate" required=""
+              label for="name"
+                = "Nome"
+            div class="input-field col s12"
+              input id="database" name="database" type="text" class="validate" required=""
+              label for="database"
+                = "Database"
+            div class="input-field col s6"
+              input id="schema" name="schema" type="text" class="validate" required=""
+              label for="schema"
+                = "Schema"
+            div class="input-field col s6"
+              input id="host" name="host" type="text" class="validate" required=""
+              label for="host"
+                = "Host"
+            div class="input-field col s6"
+              input id="user" name="user" type="text" class="validate" required=""
+              label for="user"
+                = "Usuario"
+            div class="input-field col s6"
+              input id="password" name="password" type="password" class="validate" required=""
+              label for="password"
+                = "Senha"
+    div class="card-action"
+      button class="btn right waves-effect waves-light indigo hoverable" type="submit" name="action"
+        = "Editar"
+        i class="material-icons right"
+          = "send"
+      button id="valid-edit" class="btn right waves-effect waves-light orange hoverable valid-button" name="action"
+        = "Testar Conexão"
+
+javascript:
+  $(document).ready(function(){
+    $('#edit-connection').modal();
+  });
+
+  $("#edit-connection").submit(function(event) {
+    $("#valid-edit").toggleClass('disabled');
+    $("#edit-connection button[type='submit']").toggleClass('disabled');
+    event.preventDefault();
+    $('#edit-connection').modal('close');
+    $('body').removeClass('loaded');
+    $.ajax({
+      url: '/connect/edit',
+      type: "PUT",
+      data: $("#edit-connection").serialize(),
+      success: function(data) {
+        $.ajax({
+          url: '/connect/menu',
+          type: 'GET',
+          success: function(data){
+            $("#valid-edit").removeClass('disabled');
+            $("#edit-connection button[type='submit']").removeClass('disabled');
+            $("#menu").html(data);
+            $('#edit-connection')[0].reset();
+            Materialize.updateTextFields();
+            $('body').toggleClass('loaded');
+          }
+        });
+      },
+      error: function(){
+        $('body').toggleClass('loaded');
+        setTimeout(function() {
+          $('#edit-connection').modal('open');
+          $.confirm({
+            title: 'Conexão',
+            content: 'Erro ao se conectar ao banco de dados.',
+            backgroundDismiss: false,
+            type: 'red',
+            buttons: {
+              okay: {
+                btnClass: 'waves-effect waves-light btn red lighten-1 hoverable',
+                action: function () {
+                  $("#valid-edit").removeClass('disabled');
+                  $("#edit-connection button[type='submit']").removeClass('disabled');
+                }
+              }
+            }
+          });
+        }, 400);
+      }
+    });
+  });
+
+  $("#valid-edit").click(function(event){
+    $("#valid-edit").toggleClass('disabled');
+    $("#edit-connection button[type='submit']").toggleClass('disabled');
+    event.preventDefault();
+    event.stopPropagation();
+    $.ajax({
+      url: '/connect/valid',
+      type: "GET",
+      data: $("#edit-connection").serialize(),
+      success: function(data) {
+        $.confirm({
+          title: 'Conexão',
+          content: 'Sucesso ao se conectar ao banco de dados.',
+          backgroundDismiss: false,
+          type: 'green',
+          buttons: {
+            okay: {
+              btnClass: 'waves-effect waves-light btn green lighten-1 hoverable',
+              action: function () {
+                $("#valid-edit").removeClass('disabled');
+                $("#edit-connection button[type='submit']").removeClass('disabled');
+              }
+            }
+          }
+        });
+      },
+      error: function(){
+        $.confirm({
+          title: 'Conexão',
+          content: 'Erro ao se conectar ao banco de dados.',
+          backgroundDismiss: false,
+          type: 'red',
+          buttons: {
+            okay: {
+              btnClass: 'waves-effect waves-light btn red lighten-1 hoverable',
+              action: function () {
+                $("#valid-edit").removeClass('disabled');
+                $("#edit-connection button[type='submit']").removeClass('disabled');
+              }
+            }
+          }
+        });
+      }
+    });
+  });

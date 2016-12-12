@@ -1,0 +1,61 @@
+div class="card"
+  div class="card-title submit-form valign-wrapper card-panel indigo lighten-1"
+    span class="valign white-text text-white"
+      = "PostgreSQL Rewrite Advisor"
+  div class="card-content"
+    div class="row"
+      div class="input-field col s12"
+        div class="progress-bar"
+          div id="analyze" class="circle done"
+            span class="label"
+              = "1"
+            span class="title" style="margin-left: 0;"
+              = "Analisa"
+          span id="bar-one" class="bar done"
+          div id="identify" class="circle done"
+            span class="label"
+              = "2"
+            span class="title" style="margin-left: -6px;"
+              = "Identifica"
+          span id="bar-two" class="bar done"
+          div id="rewrite" class="circle active"
+            span class="label"
+              = "3"
+            span class="title" style="margin-left: -8px;"
+              = "Reescreve"
+          span id="bar-tree" class="bar"
+          div id="show" class="circle"
+            span class="label"
+              = "4"
+            span class="title" style="margin-left: 0;"
+              = "Mostra"
+
+javascript:
+  $(document).ready(function(){
+    setTimeout(function() {
+      $("#bar-tree").toggleClass('active')
+    }, 1000);
+    $.ajax({
+      url: '/pgra/rewrite',
+      type: "GET",
+      success: function(data) {
+        setTimeout(function() {
+          $("#bar-tree").toggleClass('done');
+          setTimeout(function() {
+            $("#container").html(data);
+            debug();
+          }, 500);
+        }, 1000);
+      },
+      error: function() {
+        setTimeout(function() {
+          $("#bar-tree").toggleClass('done');
+          setTimeout(function() {
+            $("#rewrite").toggleClass('erro');
+            $("#rewrite").removeClass('active');
+            error();
+          }, 500);
+        }, 1000);
+      }
+    });
+  });

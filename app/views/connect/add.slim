@@ -1,0 +1,144 @@
+div id="add" class="fixed-action-btn add-button"
+  button class="modal-trigger btn-floating right btn-large waves-effect waves-light indigo hoverable" data-target="add-connection"
+    i class="material-icons"
+      = "add"
+
+form id="add-connection" class="modal modal-fixed-footer hoverable"
+  div id="card" class="card"
+    div class="card-title submit-form valign-wrapper card-panel indigo lighten-1"
+      span class="valign white-text text-white"
+        = " Adicionar Conexão"
+    div class="card-content"
+      div class="row"
+        div class="input-field col s12"
+          div class="row"
+            div class="input-field col s12"
+              input id="name" name="name" type="text" class="validate" required=""
+              label for="name"
+                = "Nome"
+            div class="input-field col s12"
+              input id="database" name="database" type="text" class="validate" required=""
+              label for="database"
+                = "Database"
+            div class="input-field col s6"
+              input id="schema" name="schema" type="text" class="validate" required=""
+              label for="schema"
+                = "Schema"
+            div class="input-field col s6"
+              input id="host" name="host" type="text" class="validate" required=""
+              label for="host"
+                = "Host"
+            div class="input-field col s6"
+              input id="user" name="user" type="text" class="validate" required=""
+              label for="user"
+                = "Usuario"
+            div class="input-field col s6"
+              input id="password" name="password" type="password" class="validate" required=""
+              label for="password"
+                = "Senha"
+    div class="card-action"
+      button class="btn right waves-effect waves-light indigo hoverable" type="submit" name="action"
+        = "Adicionar"
+        i class="material-icons right"
+          = "send"
+      button id="valid-add" class="btn right waves-effect waves-light orange hoverable valid-button" name="action"
+        = "Testar Conexão"
+
+javascript:
+  $(document).ready(function(){
+    $('#add-connection').modal();
+  });
+
+  $("#add-connection").submit(function(event) {
+    $("#valid-add").toggleClass('disabled');
+    $("#add-connection button[type='submit']").toggleClass('disabled');
+    event.preventDefault();
+    $('#add-connection').modal('close');
+    $('body').removeClass('loaded');
+    $.ajax({
+      url: '/connect/add',
+      type: "POST",
+      data: $("#add-connection").serialize(),
+      success: function(data) {
+        $.ajax({
+          url: '/connect/menu',
+          type: 'GET',
+          success: function(data){
+            $("#valid-add").removeClass('disabled');
+            $("#add-connection button[type='submit']").removeClass('disabled');
+            $("#menu").html(data);
+            $('#add-connection')[0].reset();
+            Materialize.updateTextFields();
+            $('body').toggleClass('loaded');
+          }
+        });
+      },
+      error: function(){
+        $('body').toggleClass('loaded');
+        setTimeout(function() {
+          $('#add-connection').modal('open');
+          $.confirm({
+            title: 'Conexão',
+            content: 'Erro ao se conectar ao banco de dados.',
+            backgroundDismiss: false,
+            type: 'red',
+            buttons: {
+              okay: {
+                btnClass: 'waves-effect waves-light btn red lighten-1 hoverable',
+                action: function () {
+                  $("#valid-add").removeClass('disabled');
+                  $("#add-connection button[type='submit']").removeClass('disabled');
+                }
+              }
+            }
+          });
+        }, 400);
+      }
+    });
+  });
+
+  $("#valid-add").click(function(event){
+    $("#valid-add").toggleClass('disabled');
+    $("#add-connection button[type='submit']").toggleClass('disabled');
+    event.preventDefault();
+    event.stopPropagation();
+    $.ajax({
+      url: '/connect/valid',
+      type: "GET",
+      data: $("#add-connection").serialize(),
+      success: function(data) {
+        $.confirm({
+          title: 'Conexão',
+          content: 'Sucesso ao se conectar ao banco de dados.',
+          backgroundDismiss: false,
+          type: 'green',
+          buttons: {
+            okay: {
+              btnClass: 'waves-effect waves-light btn green lighten-1 hoverable',
+              action: function () {
+                $("#valid-add").removeClass('disabled');
+                $("#add-connection button[type='submit']").removeClass('disabled');
+              }
+            }
+          }
+        });
+      },
+      error: function(){
+        $.confirm({
+          title: 'Conexão',
+          content: 'Erro ao se conectar ao banco de dados.',
+          backgroundDismiss: false,
+          type: 'red',
+          buttons: {
+            okay: {
+              btnClass: 'waves-effect waves-light btn red lighten-1 hoverable',
+              action: function () {
+                $("#valid-add").removeClass('disabled');
+                $("#add-connection button[type='submit']").removeClass('disabled');
+              }
+            }
+          }
+        });
+      }
+    });
+  });

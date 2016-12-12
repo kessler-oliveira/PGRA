@@ -1,0 +1,87 @@
+div id="card" class="card"
+  div class="card-title submit-form valign-wrapper card-panel indigo lighten-1"
+    span class="valign white-text text-white"
+      = "PostgreSQL Rewrite Advisor"
+  div class="card-content"
+    div class="row"
+      div class="input-field col s12"
+        table class="highlight"
+          thead
+            tr
+              th
+                = "Rank"
+              th
+                = "Reescrita"
+              th
+                = "Descrição"
+              th
+                = "Custo"
+              th class="center-align"
+                = "Aumento de Performance"
+              th class="center-align"
+                = "Query"
+              th
+                = "Reescrever Novamente"
+          - unless @rewrite.blank?
+            tbody
+              - @rewrite.each_with_index do |value, i|
+                tr
+                  td class="center-align"
+                    = value["rank"]
+                  td
+                    = value["name"]
+                  td
+                    = value["description"]
+                  td class="center-align"
+                    = value["query"]["cost"]
+                  td class="center-align"
+                    = "#{value["performance"]}%"
+                  td class="center-align"
+                    button class="btn waves-effect waves btn-flat view-button" data-query="#{i}"
+                      i class="material-icons"
+                        = "launch"
+                  td class="center-align"
+                    button class="btn waves-effect waves btn-flat #{value["reescrever"] ? "" : "disabled"} rewrite-button" data-query="#{i}"
+                      i class="material-icons"
+                        = "repeat"
+  div class="card-action"
+    a id="inicio" class="btn right waves-effect waves-light indigo hoverable" href="/"
+      = "Inicio"
+      i class="material-icons right"
+        = "cached"
+
+javascript:
+  $(document).ready(function(){
+    hljs.initHighlighting();
+  });
+
+  $('#inicio').click(function(){
+    $(this).toggleClass('disabled');
+  })
+
+  $(".view-button").click(function(event){
+    var query = $(this).data("query");
+    window.open('/pgra/query/' + query, '_blank');
+  });
+
+  $(".rewrite-button").click(function(event){
+    var query = $(this).data("query");
+    $(this).toggleClass('disabled');
+    $.ajax({
+      url: '/pgra/init/' + query,
+      type: "GET",
+      success: function(data) {
+        $("#toast-container .toast").toggle('fade', 200);
+        $('#menu').toggle("slide",200);
+        $('#add').fadeOut(200);
+        $("#container").fadeOut(200, function() {
+          $('#content').removeClass('col s9');
+          $('#content').removeClass('offset-s3');
+          $('#content').toggleClass('col s8');
+          $('#content').toggleClass('offset-s2');
+          $("#container").html(data);
+          $("#container").fadeIn(800);
+        });
+      }
+    });
+  });

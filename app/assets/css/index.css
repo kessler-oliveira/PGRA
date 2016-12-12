@@ -1,0 +1,226 @@
+#connection {
+  margin: 20px 15px 100px 15px;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+#connection .collapsible-header {
+  padding: 0 1px 1px 1px;
+}
+
+#connection .collapsible-header .power-button-label{
+  padding-left: 15px;
+  width: calc(100% - 61px);
+}
+
+#connection .collapsible-header .power-button {
+  border-left: 1px solid #ddd;
+}
+
+#connection .collapsible-header .edit-button {
+
+}
+
+#connection .collapsible-header .delete-button {
+
+}
+
+#connection .collapsible-header .power-button:hover i {
+  color: #d32f2f;
+}
+
+#connection .collapsible-header .power-button i {
+  margin: 0 15px;
+}
+
+#connection .collapsible-body button {
+  padding: 0 15px;
+  margin: 0 5px;
+  width: calc(50% - 10px);
+}
+
+#connection .collapsible-body .row {
+  margin: 10px;
+}
+
+.add-button {
+  bottom: 30px;
+  right: 25px;
+  position: absolute;
+}
+
+.connection-header {
+  width: 100%;
+  height: 175px;
+  background-image: url(/img/header.jpg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  left: 0;
+  position: absolute;
+  box-shadow: inset 0 2px 5px 0 rgba(0,0,0,0.16), inset 0 2px 10px 0 rgba(0,0,0,0.12);
+  color: #ffffff;
+  text-shadow: 0 6px 10px rgba(0,0,0,0.14),0 1px 18px rgba(0,0,0,0.12),0 3px 5px rgba(0,0,0,0.3)
+}
+
+.connection-header h4 {
+  margin-left: 20px;
+}
+
+.connection-header p {
+  margin-left: 20px;
+}
+
+.connection-header .logout-button {
+  position: relative;
+  top: 25px;
+  right: 25px;
+}
+
+.connection-header .logout-button:hover {
+  color: #d32f2f;
+  cursor: pointer;
+}
+
+.connection-body {
+  width: 100%;
+  top: 175px;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  position: absolute;
+}
+
+body {
+  background-color: #F3F3F3;
+}
+
+#menu {
+  box-shadow: 0 2px 15px 0 rgba(0,0,0,0.16),0 2px 15px 0 rgba(0,0,0,0.12);
+  position: fixed;
+  height: 100%;
+  z-index: 10;
+  background-color: #F3F3F3;
+}
+
+#content {
+  /*background-image: url(/img/tile.png);
+  background-size: 70px;*/
+  background-color: #F3F3F3;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+}
+
+#container {
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  max-height: 100%;
+}
+
+.submit-form {
+  border-bottom: 1px solid rgba(160,160,160,0.2);
+  height: 60px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.submit-form span {
+  margin-left: 20px;
+}
+
+.input-field textarea:focus + label {
+  color: #7986cb !important;
+}
+
+.row .input-field textarea:focus {
+  border-bottom: 1px solid #7986cb !important;
+  box-shadow: 0 1px 0 0 #7986cb !important
+}
+
+.input-field input:focus + label {
+  color: #7986cb !important;
+}
+
+.row .input-field input:focus {
+  border-bottom: 1px solid #7986cb !important;
+  box-shadow: 0 1px 0 0 #7986cb !important
+}
+
+#card {
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  transition: 1s linear all;
+}
+
+#card .card-content .row {
+  margin-bottom: 0;
+}
+
+#card .card-content .row .input-field {
+  margin-top: 0;
+}
+
+#card .card-action {
+  height: 77px;
+}
+
+#add-connection {
+  max-height: inherit;
+  height: inherit;
+  border-radius: 0px;
+}
+
+#add-connection .card {
+  margin: 0px;
+}
+
+#add-connection .card .card-title {
+  margin: 0px;
+  border-radius: 0px;
+}
+
+#edit-connection {
+  max-height: inherit;
+  height: inherit;
+  border-radius: 0px;
+}
+
+#edit-connection .card {
+  margin: 0px;
+}
+
+#edit-connection .card .card-title {
+  margin: 0px;
+  border-radius: 0px;
+}
+
+.flash{
+  display: none;
+}
+
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  transform: translate(-50%);
+  left: 50%;
+  bottom: 10%;
+}
+
+#toast-container:hover {
+  cursor: pointer;
+}
+
+#logo img {
+  height: 130px;
+  width: 390px;
+}
+
+#logo {
+  padding-top: 5px;
+}
+
+.valid-button {
+  margin-right: 10px;
+}

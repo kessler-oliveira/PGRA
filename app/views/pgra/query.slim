@@ -1,0 +1,19 @@
+= stylesheet_tag '/css/perfect-scrollbar.min.css'
+= stylesheet_tag '/css/mono-blue.css'
+
+pre
+  code class="html"
+    = @query
+
+= javascript_tag '/js/jquery.min.js'
+= javascript_tag '/js/highlight.pack.js'
+= javascript_tag '/js/perfect-scrollbar.jquery.min.js'
+
+javascript:
+  $(document).ready(function() {
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+
+    $('body').perfectScrollbar();
+  });

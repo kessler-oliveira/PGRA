@@ -1,0 +1,211 @@
+div class="connection-header"
+  div class="right logout-button"
+    i class="material-icons"
+      = "power_settings_new"
+  h4
+    = @db['name']
+  p
+    strong
+      = "Database: "
+    = @db['database']
+    br/
+    strong
+      = "Schema: "
+    = @db['schema_search_path']
+    br/
+    strong
+      = "Host: "
+    = @db['host']
+    br/
+    strong
+      = "Usuario: "
+    = @db['username']
+div class="connection-body"
+  - unless @dbs.blank?
+    ul id="connection" class="collapsible hoverable" data-collapsible="accordion"
+      - @dbs.each do |key, value|
+        li
+          div class="collapsible-header"
+            div class="waves-effect power-button-label"
+              i class="material-icons"
+                = "dns"
+              = value['name']
+            div class="right power-button" data-name="#{value['name']}" data-id="#{key}"
+              i class="material-icons"
+                = "power_settings_new"
+          div class="collapsible-body"
+            p
+              strong
+                = "Database: "
+              = value['database']
+              br/
+              strong
+                = "Schema: "
+              = value['schema_search_path']
+              br/
+              strong
+                = "Host: "
+              = value['host']
+              br/
+              strong
+                = "User: "
+              = value['username']
+            div class="row"
+              button class="col s6 waves-effect waves-light btn indigo darken-2 edit-button hoverable" data-name="#{value['name']}" data-id="#{key}"
+                i class="material-icons"
+                  = "edit"
+              button class="col s6 waves-effect waves-light btn red darken-2 delete-button hoverable" data-name="#{value['name']}" data-id="#{key}"
+                i class="material-icons"
+                  = "delete"
+
+javascript:
+  $(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : false
+    });
+    $('.connection-body').perfectScrollbar();
+  });
+
+  $(".power-button").click(function(event){
+    event.stopPropagation();
+    var name = $(this).data("name");
+    var id = $(this).data("id");
+    $.confirm({
+      title: 'Conectar',
+      content: 'Deseja conectar ao banco de dados "' + name + '" ?',
+      buttons: {
+        conectar: {
+          btnClass: 'waves-effect waves-light btn indigo darken-2 hoverable',
+          action: function (){
+            $('body').removeClass('loaded');
+            $.ajax({
+              url: '/connect/database/' + id,
+              type: 'GET',
+              success: function(data){
+                $.ajax({
+                  url: '/connect/menu',
+                  type: 'GET',
+                  success: function(data){
+                    $("#menu").html(data);
+                    $.ajax({
+                      url: '/pgra/submit',
+                      type: 'GET',
+                      success: function(data){
+                        $("#container").html(data);
+                        $('body').toggleClass('loaded');
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        },
+        cancelar: {
+          btnClass: 'waves-effect waves-light btn red darken-2 hoverable',
+          action: function (){
+          }
+        },
+      }
+    });
+  });
+
+  $(".logout-button").click(function(){
+    var name = $(this).data("name");
+    $.confirm({
+      title: 'Desconectar',
+      content: 'Deseja desconectar ?',
+      buttons: {
+        desconectar: {
+          btnClass: 'waves-effect waves-light btn indigo darken-2 hoverable',
+          action: function (){
+            $('body').removeClass('loaded');
+            $.ajax({
+              url: '/connect/logout',
+              type: 'GET',
+              success: function(data){
+                $.ajax({
+                  url: '/connect/menu',
+                  type: 'GET',
+                  success: function(data){
+                    $("#menu").html(data);
+                    $.ajax({
+                      url: '/pgra/submit',
+                      type: 'GET',
+                      success: function(data){
+                        $("#container").html(data);
+                        $('body').toggleClass('loaded');
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        },
+        cancelar: {
+          btnClass: 'waves-effect waves-light btn red darken-2 hoverable',
+          action: function (){
+          }
+        },
+      }
+    });
+  });
+
+  $(".delete-button").click(function(event){
+    event.stopPropagation();
+    var name = $(this).data("name");
+    var id = $(this).data("id");
+    $.confirm({
+      title: 'Deletar',
+      content: 'Deseja deletar o banco de dados "' + name + '" ?',
+      buttons: {
+        deletar: {
+          btnClass: 'waves-effect waves-light btn indigo darken-2 hoverable',
+          action: function (){
+            $('body').removeClass('loaded');
+            $.ajax({
+              url: '/connect/delete/' + id,
+              type: 'DELETE',
+              success: function(data){
+                $.ajax({
+                  url: '/connect/menu',
+                  type: 'GET',
+                  success: function(data){
+                    $("#menu").html(data);
+                    $('body').toggleClass('loaded');
+                  }
+                });
+              }
+            });
+          }
+        },
+        cancelar: {
+          btnClass: 'waves-effect waves-light btn red darken-2 hoverable',
+          action: function (){
+          }
+        },
+      }
+    });
+  });
+
+  $(".edit-button").click(function(event){
+    event.stopPropagation();
+    var id = $(this).data("id");
+    $.ajax({
+      url: '/connect/get/' + id,
+      type: 'GET',
+      success: function(data){
+        db = JSON.parse(data);
+        $('#edit-connection :input[name="id"]').val(db.id)
+        $('#edit-connection :input[name="name"]').val(db.name)
+        $('#edit-connection :input[name="database"]').val(db.database)
+        $('#edit-connection :input[name="schema"]').val(db.schema_search_path)
+        $('#edit-connection :input[name="host"]').val(db.host)
+        $('#edit-connection :input[name="user"]').val(db.username)
+        $('#edit-connection :input[name="password"]').val(db.password)
+        Materialize.updateTextFields();
+        $('#edit-connection').modal('open');
+      }
+    });
+  });
