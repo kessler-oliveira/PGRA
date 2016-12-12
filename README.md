@@ -15,13 +15,7 @@ $ git clone --depth 1 https://github.com/kessler-oliveira/PGRA.git
 ### Use o bundler para instalar gems
 
 ``` bash
-$ bundle install --no-deployment
-```
-
-### Use npm para instalar alguma dependência
-
-```bash
-$ npm i
+$ bundle install
 ```
 
 ### Iniciar o servidor
