@@ -30,7 +30,7 @@ $ npm i
 $ rackup
 ```
 
-or
+ou
 
 ``` bash
 $ bundle exec shotgun config.ru
