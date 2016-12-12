@@ -33,6 +33,7 @@ class Refactor_col_sub_aco
         query['tree'].each do |raiz|
           rewrite_select(query, raiz)
         end
+        @@alias_number = 0
         return JSON.parse(Query.new(PgQuery.new("", query['tree']).deparse).to_json)
       rescue
         return nil

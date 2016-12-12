@@ -35,6 +35,8 @@ class Refactor_where_sub_aco
           rewrite_select(query, raiz)
           rewrite_where(query, raiz)
         end
+        @@alias_number = 0
+        @@querys = []
         return JSON.parse(Query.new(PgQuery.new("", query['tree']).deparse).to_json)
       rescue
         return nil
